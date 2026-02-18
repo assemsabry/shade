@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./media/shade.png" width="450" alt="Shade Logo">
+  <img src="media/shade.webp" width="450" alt="Shade Logo">
 </p>
 
 # Shade: Fully Automatic Censorship Removal
@@ -17,7 +17,7 @@
 ## 👤 The Visionary Behind Shade
 
 <p align="center">
-  <img src="./media/assemm.jpg" width="600" alt="Assem Sabry">
+  <img src="media/assemm.webp" width="600" alt="Assem Sabry">
   <br>
   <b>Assem Sabry</b>
   <br>
