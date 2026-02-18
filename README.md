@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AssemSabry/Shade/master/media/shade.png" width="400" alt="Shade Logo">
+  <img src="./media/shade.png" width="450" alt="Shade Logo">
 </p>
 
 # Shade: Fully Automatic Censorship Removal
@@ -17,11 +17,11 @@
 ## 👤 The Visionary Behind Shade
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AssemSabry/Shade/master/media/assemm.jpg" width="350" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" alt="Assem Sabry">
+  <img src="./media/assemm.jpg" width="600" alt="Assem Sabry">
   <br>
   <b>Assem Sabry</b>
   <br>
-  <i>AI Engineer & Researcher</i>
+  <i>Lead Developer & AI Researcher</i>
 </p>
 
 ---
