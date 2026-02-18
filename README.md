@@ -21,7 +21,7 @@
   <br>
   <b>Assem Sabry</b>
   <br>
-  <i>Lead Developer & AI Researcher</i>
+  <i>AI Engineer & Researcher</i>
 </p>
 
 ---
