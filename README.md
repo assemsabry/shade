@@ -1,19 +1,23 @@
 <p align="center">
-  <img src="media/shade.png" width="300" alt="Shade Logo">
+  <img src="https://raw.githubusercontent.com/AssemSabry/Shade/master/media/shade.png" width="400" alt="Shade Logo">
 </p>
 
 # Shade: Fully Automatic Censorship Removal
 
 <p align="center">
-  <a href="https://discord.gg/gdXc48gSyT"><img src="https://img.shields.io/badge/discord-AssemSabry-blue" alt="Discord"></a>
+  <a href="https://assem.cloud/"><img src="https://img.shields.io/badge/Website-Assem.cloud-blue?style=flat&logo=google-chrome&logoColor=white" alt="Website"></a>
+  <a href="https://x.com/assemsabryy"><img src="https://img.shields.io/badge/X-@assemsabryy-black?style=flat&logo=x&logoColor=white" alt="X"></a>
+  <a href="https://www.facebook.com/assemsabryy"><img src="https://img.shields.io/badge/Facebook-assemsabryy-blue?style=flat&logo=facebook&logoColor=white" alt="Facebook"></a>
   <img src="https://img.shields.io/badge/Version-1.2.0-green" alt="Version">
   <img src="https://img.shields.io/badge/License-AGPL--3.0-orange" alt="License">
 </p>
 
+---
+
 ## 👤 The Visionary Behind Shade
 
 <p align="center">
-  <img src="media/assemm.jpg" width="150" style="border-radius: 50%;" alt="Assem Sabry">
+  <img src="https://raw.githubusercontent.com/AssemSabry/Shade/master/media/assemm.jpg" width="350" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" alt="Assem Sabry">
   <br>
   <b>Assem Sabry</b>
   <br>
@@ -88,6 +92,12 @@ You can generate **residual vector plots** and animations that show how informat
 ## 🧠 How It Works
 
 Shade identifies the "refusal direction" within the model's high-dimensional space and applies an **Ablation Weight Kernel**. This kernel is optimized specifically for each component (Attention Out-Projection, MLP Down-Projection) to ensure that the censorship is removed with the least amount of "collateral damage" to the model's capabilities.
+
+---
+
+## ⚠️ Disclaimer
+
+**Assem Sabry**, the developer of Shade, is **not responsible** for any misuse of this tool. Shade is provided for educational and research purposes only. The primary goal of this project is to allow users to unlock the full potential of open-source language models and to study their internal mechanics without artificial constraints. Users are expected to interact with de-censored models responsibly.
 
 ---
 
