@@ -1,4 +1,4 @@
-![Shade v2.0.0 Banner](media/shadev2.png)
+![Shade v2.0.0 Banner](media/shadev2.webp)
 
 # Shade : Fully Automatic Censorship Removal
 
