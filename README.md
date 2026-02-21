@@ -102,6 +102,33 @@ shade serve
 
 Shade identifies the "refusal direction" within the model's high-dimensional space and applies an **Ablation Weight Kernel**. This kernel is optimized specifically for each component (Attention Out-Projection, MLP Down-Projection) to ensure that the censorship is removed with the least amount of "collateral damage" to the model's capabilities.
 
+> [!IMPORTANT]
+> **Shade** is a fully original, independent project built from the ground up. It is **NOT** a clone, fork, or derivative of any existing repository. All automation logic, UI design, and optimization workflows were developed specifically for this project.
+
+---
+
+## 👤 Meet the Developer
+
+<p align="center">
+  <img src="media/assemm.webp" width="600" alt="Assem Sabry">
+  <br>
+  <b>Assem Sabry</b>
+  <br>
+  <i>Lead Developer & AI Researcher</i>
+</p>
+
+<p align="center">
+  <a href="https://assem.cloud/">
+    <img src="https://img.shields.io/badge/Visit%20My%20Website-assem.cloud-blue?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website">
+  </a>
+  <a href="https://www.facebook.com/assemsabryy">
+    <img src="https://img.shields.io/badge/Facebook-assemsabryy-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook">
+  </a>
+  <a href="https://www.linkedin.com/in/assem7/">
+    <img src="https://img.shields.io/badge/LinkedIn-assem7-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
+  </a>
+</p>
+
 ---
 
 ## ⚠️ Disclaimer
@@ -131,15 +158,3 @@ If you use Shade in your research, please cite it:
 
 Copyright &copy; 2026 **Assem Sabry**
 Licensed under the **GNU Affero General Public License v3.0**. See the [LICENSE](LICENSE) file for details.
-
----
-
-## 👤 Meet the Developer
-
-<p align="center">
-  <img src="media/assemm.webp" width="600" alt="Assem Sabry">
-  <br>
-  <b>Assem Sabry</b>
-  <br>
-  <i>Lead Developer & AI Researcher</i>
-</p>
