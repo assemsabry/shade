@@ -1,8 +1,8 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
-# Copyright (C) 2026 Assem Sabry
+from __future__ import annotations
 
 import torch.nn.functional as F
 from torch import Tensor
+from pathlib import Path
 
 from .config import Settings
 from .model import Model

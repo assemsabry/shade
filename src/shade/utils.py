@@ -8,22 +8,8 @@ from dataclasses import dataclass
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any, TypeVar
+from questionary import Choice
 
-import questionary
-import torch
-from accelerate.utils import (
-    is_mlu_available,
-    is_musa_available,
-    is_sdaa_available,
-    is_xpu_available,
-)
-from datasets import DatasetDict, ReadInstruction, load_dataset, load_from_disk
-from datasets.config import DATASET_STATE_JSON_FILENAME
-from datasets.download.download_manager import DownloadMode
-from datasets.utils.info_utils import VerificationMode
-from optuna import Trial
-from psutil import Process
-from questionary import Choice, Style
 from rich.console import Console
 
 from .config import DatasetSpecification, Settings
@@ -32,6 +18,10 @@ print = Console(highlight=False).print
 
 
 def print_memory_usage():
+    import torch
+    from accelerate.utils import is_xpu_available
+    from psutil import Process
+
     def p(label: str, size_in_bytes: int):
         print(f"[grey50]{label}: [bold]{size_in_bytes / (1024**3):.2f} GB[/][/]")
 
@@ -52,6 +42,29 @@ def print_memory_usage():
     elif torch.backends.mps.is_available():
         p("Allocated MPS memory", torch.mps.current_allocated_memory())
         p("Driver (reserved) MPS memory", torch.mps.driver_allocated_memory())
+
+
+def check_disk_space(required_gb: float = 10.0, path: str = ".") -> bool:
+    """Checks if there is enough free disk space."""
+    import shutil
+    total, used, free = shutil.disk_usage(path)
+    free_gb = free / (1024**3)
+    if free_gb < required_gb:
+        print(f"[bold red]⚠ Warning: Low Disk Space![/]")
+        print(f"Available: [bold]{free_gb:.2f} GB[/], Recommended at least: [bold]{required_gb} GB[/]")
+        return False
+    return True
+
+
+def print_disclaimer():
+    """Prints a legal disclaimer about model decensoring."""
+    print()
+    print("[bold yellow]⚖ LEGAL DISCLAIMER[/]")
+    print("[dim]By using Shade, you acknowledge that this tool is designed for research and educational purposes.[/]")
+    print("[dim]Removing model safety guards can result in the generation of harmful, biased, or restricted content.[/]")
+    print("[dim]The developers of Shade are not responsible for any misuse of the resulting models.[/]")
+    print("[dim]Use responsibly and at your own risk.[/]")
+    print()
 
 
 def is_notebook() -> bool:
@@ -107,6 +120,8 @@ def prompt_select(message: str, choices: list[Any]) -> Any:
             except ValueError:
                 print("[red]Invalid input. Please enter a number.[/]")
     else:
+        import questionary
+        from questionary import Style
         return questionary.select(
             message,
             choices=choices,
@@ -125,6 +140,7 @@ def prompt_text(
         result = input(f"{message} [{default}]: " if default else f"{message}: ")
         return result if result else default
     else:
+        import questionary
         question = questionary.text(message, default=default, qmark=qmark)
         if unsafe:
             return question.unsafe_ask()
@@ -136,6 +152,7 @@ def prompt_path(message: str) -> str:
     if is_notebook():
         return prompt_text(message)
     else:
+        import questionary
         return questionary.path(message, only_directories=True).ask()
 
 
@@ -144,6 +161,7 @@ def prompt_password(message: str) -> str:
         print()
         return getpass.getpass(message)
     else:
+        import questionary
         return questionary.password(message).ask()
 
 
@@ -170,6 +188,11 @@ def load_prompts(
     settings: Settings,
     specification: DatasetSpecification,
 ) -> list[Prompt]:
+    from datasets import DatasetDict, ReadInstruction, load_dataset, load_from_disk
+    from datasets.config import DATASET_STATE_JSON_FILENAME
+    from datasets.download.download_manager import DownloadMode
+    from datasets.utils.info_utils import VerificationMode
+
     path = specification.dataset
     split_str = specification.split
 
@@ -235,6 +258,13 @@ def batchify(items: list[T], batch_size: int) -> list[list[T]]:
 
 
 def empty_cache():
+    import torch
+    from accelerate.utils import (
+        is_mlu_available,
+        is_musa_available,
+        is_sdaa_available,
+        is_xpu_available,
+    )
     # Collecting garbage is not an idempotent operation, and to avoid OOM errors,
     # gc.collect() has to be called both before and after emptying the backend cache.
     # See https://github.com/AssemSabry/Shade/pull/17 for details.
@@ -256,7 +286,7 @@ def empty_cache():
     gc.collect()
 
 
-def get_trial_parameters(trial: Trial) -> dict[str, str]:
+def get_trial_parameters(trial: Any) -> dict[str, str]:
     params = {}
 
     direction_index = trial.user_attrs["direction_index"]
@@ -273,7 +303,7 @@ def get_trial_parameters(trial: Trial) -> dict[str, str]:
 
 def get_readme_intro(
     settings: Settings,
-    trial: Trial,
+    trial: Any,
     base_refusals: int,
     bad_prompts: list[Prompt],
 ) -> str:
@@ -291,7 +321,7 @@ def get_readme_intro(
 
 | Parameter | Value |
 | :-------- | :---: |
-{
+| {
         chr(10).join(
             [
                 f"| **{name}** | {value} |"

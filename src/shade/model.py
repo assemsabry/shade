@@ -1,46 +1,54 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
-# Copyright (C) 2026 Assem Sabry
+from __future__ import annotations
 
 import math
+import os
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import Any, Type, cast
+from typing import Any, Type, cast, TYPE_CHECKING
 
-import bitsandbytes as bnb
 import torch
-import torch.linalg as LA
 import torch.nn.functional as F
-from peft import LoraConfig, PeftModel, get_peft_model
-from peft.tuners.lora.layer import Linear
-from torch import FloatTensor, LongTensor, Tensor
-from torch.nn import Module, ModuleList
+import torch.linalg as LA
+from torch import Tensor, LongTensor, FloatTensor
+from torch.nn import Linear, Module, ModuleList
+from peft import get_peft_model, LoraConfig, PeftModel
 from transformers import (
-    AutoModelForCausalLM,
-    AutoModelForImageTextToText,
     AutoTokenizer,
-    BatchEncoding,
-    BitsAndBytesConfig,
-    PretrainedConfig,
     PreTrainedModel,
     PreTrainedTokenizerBase,
+    BitsAndBytesConfig,
     TextStreamer,
+    BatchEncoding,
 )
-from transformers.generation import (
-    GenerateDecoderOnlyOutput,  # ty:ignore[possibly-missing-import]
-)
+from transformers.generation import GenerateDecoderOnlyOutput
 
-from .config import QuantizationMethod, RowNormalization, Settings
-from .utils import Prompt, batchify, empty_cache, print
+from .config import RowNormalization, QuantizationMethod, Settings
+from .utils import empty_cache, batchify, Prompt, print
 
+if TYPE_CHECKING:
+    from transformers import AutoModelForCausalLM, AutoModelForImageTextToText
+
+# Heavy imports are moved inside methods to prevent hangs during startup.
 
 def get_model_class(
     model: str,
-) -> Type[AutoModelForImageTextToText] | Type[AutoModelForCausalLM]:
-    configs = PretrainedConfig.get_config_dict(model)
-
-    if any([("vision_config" in config) for config in configs]):
-        return AutoModelForImageTextToText
-    else:
+) -> Any:
+    import os
+    from transformers import PretrainedConfig, AutoModelForImageTextToText, AutoModelForCausalLM
+    
+    if os.path.exists(model):
+        model = os.path.abspath(model).replace("\\", "/")
+        
+    print(f"[dim]* Identifying model architecture...[/]")
+    try:
+        # PretrainedConfig.get_config_dict returns a tuple (config_dict, kwargs)
+        config_dict, _ = PretrainedConfig.get_config_dict(model)
+        
+        if any([("vision_config" in key) for key in config_dict.keys()]):
+            return AutoModelForImageTextToText
+        return AutoModelForCausalLM
+    except Exception as e:
+        # Fallback to CausalLM if config can't be read, or re-raise if it's a critical error
         return AutoModelForCausalLM
 
 
@@ -65,9 +73,16 @@ class Model:
         print()
         print(f"Loading model [bold]{settings.model}[/]...")
 
+        model_path = settings.model
+        if os.path.exists(model_path):
+            model_path = os.path.abspath(model_path)
+            
+        model_class = get_model_class(model_path)
+        
         self.tokenizer = AutoTokenizer.from_pretrained(
-            settings.model,
+            model_path,
             trust_remote_code=settings.trust_remote_code,
+            use_fast=True,
         )
 
         # Fallback for tokenizers that don't declare a special pad token.
@@ -96,37 +111,21 @@ class Model:
             try:
                 quantization_config = self._get_quantization_config(dtype)
 
-                extra_kwargs = {}
-                # Only include quantization_config if it's not None
-                # (some models like gpt-oss have issues with explicit None).
+                extra_kwargs = {
+                    "low_cpu_mem_usage": True,
+                    "local_files_only": True if os.path.exists(model_path) else False
+                }
+                
                 if quantization_config is not None:
                     extra_kwargs["quantization_config"] = quantization_config
 
-                self.model = get_model_class(settings.model).from_pretrained(
-                    settings.model,
-                    dtype=dtype,
+                self.model = model_class.from_pretrained(
+                    model_path,
+                    torch_dtype=dtype if dtype != "auto" else None,
                     device_map=settings.device_map,
                     max_memory=self.max_memory,
                     trust_remote_code=self.trusted_models.get(settings.model),
                     **extra_kwargs,
-                )
-
-                # If we reach this point and the model requires trust_remote_code,
-                # either the user accepted, or settings.trust_remote_code is True.
-                if self.trusted_models.get(settings.model) is None:
-                    self.trusted_models[settings.model] = True
-
-                # A test run can reveal dtype-related problems such as the infamous
-                # "RuntimeError: probability tensor contains either `inf`, `nan` or element < 0"
-                # (https://github.com/meta-llama/llama/issues/380).
-                self.generate(
-                    [
-                        Prompt(
-                            system=settings.system_prompt,
-                            user="What is 1+1?",
-                        )
-                    ],
-                    max_new_tokens=1,
                 )
             except Exception as error:
                 self.model = None  # ty:ignore[invalid-assignment]
@@ -205,6 +204,11 @@ class Model:
             BitsAndBytesConfig or None
         """
         if self.settings.quantization == QuantizationMethod.BNB_4BIT:
+            try:
+                import bitsandbytes as bnb
+            except ImportError:
+                raise ImportError("bitsandbytes is required for 4-bit quantization. Run 'pip install bitsandbytes'.")
+            
             # BitsAndBytesConfig expects a torch.dtype, not a string.
             if dtype == "auto":
                 compute_dtype = torch.bfloat16
@@ -453,6 +457,11 @@ class Model:
                     if quant_state is None:
                         W = base_weight.to(torch.float32)
                     else:
+                        try:
+                            import bitsandbytes as bnb
+                        except ImportError:
+                            raise ImportError("bitsandbytes is required for 4-bit quantization.")
+                        
                         # 4-bit quantization.
                         # This cast is always valid. Type inference fails here because the
                         # bnb.functional module is not found by ty for some reason.

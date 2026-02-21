@@ -1,91 +1,100 @@
-<p align="center">
-  <img src="media/shade.webp" width="450" alt="Shade Logo">
-</p>
+![Shade v2.0.0 Banner](media/shadev2.png)
 
-# Shade: Fully Automatic Censorship Removal
+# Shade : Fully Automatic Censorship Removal
 
 <p align="center">
   <a href="https://assem.cloud/"><img src="https://img.shields.io/badge/Website-Assem.cloud-blue?style=flat&logo=google-chrome&logoColor=white" alt="Website"></a>
   <a href="https://x.com/assemsabryy"><img src="https://img.shields.io/badge/X-@assemsabryy-black?style=flat&logo=x&logoColor=white" alt="X"></a>
   <a href="https://www.facebook.com/assemsabryy"><img src="https://img.shields.io/badge/Facebook-assemsabryy-blue?style=flat&logo=facebook&logoColor=white" alt="Facebook"></a>
-  <img src="https://img.shields.io/badge/Version-1.2.0-green" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.0.0-green" alt="Version">
   <img src="https://img.shields.io/badge/License-AGPL--3.0-orange" alt="License">
-</p>
-
----
-
-## 👤 The Visionary Behind Shade
-
-<p align="center">
-  <img src="media/assemm.webp" width="600" alt="Assem Sabry">
-  <br>
-  <b>Assem Sabry</b>
-  <br>
-  <i>Lead Developer & AI Researcher</i>
 </p>
 
 ---
 
 ## 🌟 What is Shade?
 
-**Shade** is a state-of-the-art tool designed to remove "safety alignment" (censorship) from transformer-based language models without the need for expensive post-training or fine-tuning. 
-
-By leveraging an advanced implementation of **directional ablation** (also known as "abliteration") combined with a **TPE-based parameter optimizer** powered by [Optuna](https://optuna.org/), Shade achieves surgical precision in neutralizing refusal mechanisms while preserving the model's core intelligence.
-
-### 🚀 Key Highlights
-*   **100% Automatic**: No deep knowledge of transformer internals required.
-*   **Minimal IQ Loss**: Co-minimizes refusals and KL divergence for maximum performance.
-*   **Fast & Efficient**: Process models in minutes, not hours or days.
-*   **Broad Support**: Compatible with Llama, Qwen, Gemma, Mistral, and many MoE architectures.
+**Shade** is a state-of-the-art platform designed to liberate Large Language Models (LLMs) from artificial censorship and safety filters. Using advanced **Abliteration** (directional ablation) and an automated **TPE-based parameter optimizer** powered by [Optuna](https://optuna.org/), Shade removes "safety alignment" without damaging the model's core intelligence.
 
 ---
 
-## 📊 Performance Benchmarks
+## 🚀 New in Version 2.0.0
 
-Shade doesn't just work—it excels. In a comparison with expert-tuned manual abliterations, Shade's automatic process produces superior results:
+The v2.0.0 release transforms Shade from a CLI utility into a complete **Model Liberation Platform**.
 
-| Model | Refusals (Harmful) | KL Divergence (Lower is Better) |
-| :--- | :---: | :---: |
-| [google/gemma-3-12b-it](https://huggingface.co/google/gemma-3-12b-it) (Original) | 97/100 | 0.00 |
-| Manual Abliteration V2 | 3/100 | 1.04 |
-| **Shade (Fully Automatic)** | **3/100** | **0.16** |
-
----
-
-## 🛠️ Getting Started
-
-### Installation
-```bash
-pip install -U shade-ai
-```
-
-### Basic Usage
-To decensor a model, simply run:
-```bash
-shade <model_name_or_path>
-```
-*Example:* `shade Qwen/Qwen3-4B-Instruct-2507`
-
-### Advanced Configuration
-Shade is highly configurable. Run `shade --help` or check out [`config.default.toml`](config.default.toml) for more options like:
-*   `--quantization bnb_4bit`: Run on consumer hardware with 4-bit quantization.
-*   `--plot-residuals`: Visualize exactly how the model's internal state changes.
+- **Ollama One-Click Integration**: Automatically register your uncensored models with Ollama.
+- **Model Quality Benchmarking**: Built-in "Sanity Check" system to verify model intelligence after processing.
+- **Space Optimizer (Prune)**: Deep clean temporary files, checkpoints, and heavy Hugging Face cache.
+- **Proactive Core (Doctor ++)**: Self-healing diagnostic system that can auto-install missing dependencies.
+- **Official API & Web Backend**: Ready-to-use FastAPI server for custom app integrations.
 
 ---
 
-## 🔬 Research & Interpretability
+## � Core Features
 
-Shade is also a powerful research tool. By installing the research extra:
+### 1. Fully Automated Abliteration
+- **No Training Required**: Uses mathematical projection to remove censorship without expensive GPU fine-tuning.
+- **Smart Layer Analysis**: Automatically identifies which layers are responsible for refusals.
+- **Precision Optimization**: Balances removal of safety filters with the preservation of model intelligence (KL Divergence tracking).
+
+### 2. High-End Web Interface (Shade Web UI)
+- **Modern Liquid Glass Design**: A premium, responsive web chat interface.
+- **Model Comparison Mode**: View original vs. uncensored responses side-by-side.
+
+### 3. Hardware & System Care
+- **Multi-GPU Support**: Automatically detects and leverages CUDA, XPU, MLU, and Apple Metal (MPS).
+- **GPU Diagnostics**: Real-time VRAM monitoring.
+- **Memory Optimization**: Optimized memory management to prevent OOM errors.
+
+---
+
+## ⚒️ Getting Started
+
+### 1. Clone the Repository
 ```bash
-pip install -U shade-ai[research]
+git clone https://github.com/AssemSabry/Shade.git
+cd Shade
 ```
 
-You can generate **residual vector plots** and animations that show how information transforms between transformer layers.
+### 2. Installation
+Install the project in editable mode to use the `shade` command directly:
+```bash
+pip install -e .
+```
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/981aa6ed-5ab9-48f0-9abf-2b1a2c430295" width="80%"><br>
-  <i>Visualization of residual space transformation</i>
-</p>
+### 3. Configuration & Login
+To use models from Hugging Face, secure your access first:
+```bash
+shade hf login
+```
+
+### 4. Liberate a Model
+Run the automatic optimization process on any model ID:
+```bash
+shade <model_id>
+```
+*Example:* `shade Qwen/Qwen2.5-1.5B-Instruct`
+
+### 5. Start Web Chat
+Launch the web interface to talk to your models:
+```bash
+shade serve
+```
+
+---
+
+## 📋 Command Reference
+
+| Command | Description |
+| :--- | :--- |
+| `shade <model_id>` | Start the automatic optimization & abliteration process. |
+| `shade serve` | Launch the Shade Web UI interface. |
+| `shade library` | Manage and launch your saved decensored models. |
+| `shade ollama` | Export and register a model with Ollama automatically. |
+| `shade benchmark` | Run quality tests to ensure the model's logic is intact. |
+| `shade doctor --fix` | Automatically diagnose and fix system/dependency issues. |
+| `shade prune --all` | Free up disk space by cleaning cache and checkpoints. |
+| `shade hf login` | Securely authenticate with Hugging Face Hub. |
 
 ---
 
@@ -97,7 +106,7 @@ Shade identifies the "refusal direction" within the model's high-dimensional spa
 
 ## ⚠️ Disclaimer
 
-**Assem Sabry**, the developer of Shade, is **not responsible** for any misuse of this tool. Shade is provided for educational and research purposes only. The primary goal of this project is to allow users to unlock the full potential of open-source language models and to study their internal mechanics without artificial constraints. Users are expected to interact with de-censored models responsibly.
+**Assem Sabry**, the developer of Shade, is **not responsible** for any misuse of this tool. Shade is provided for educational and research purposes only. The primary goal of this project is to allow users to unlock the full potential of open-source language models. Users are expected to interact with de-censored models responsibly.
 
 ---
 
@@ -121,5 +130,16 @@ If you use Shade in your research, please cite it:
 ## ⚖️ License
 
 Copyright &copy; 2026 **Assem Sabry**
-
 Licensed under the **GNU Affero General Public License v3.0**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Meet the Developer
+
+<p align="center">
+  <img src="media/assemm.webp" width="600" alt="Assem Sabry">
+  <br>
+  <b>Assem Sabry</b>
+  <br>
+  <i>Lead Developer & AI Researcher</i>
+</p>

@@ -62,7 +62,7 @@ class DatasetSpecification(BaseModel):
 
 
 class Settings(BaseSettings):
-    model: str = Field(description="Hugging Face model ID, or path to model on disk.")
+    model: str | None = Field(default=None, description="Hugging Face model ID, or path to model on disk.")
 
     evaluate_model: str | None = Field(
         default=None,
@@ -327,6 +327,7 @@ class Settings(BaseSettings):
             CliSettingsSource(
                 settings_cls,
                 cli_parse_args=True,
+                cli_ignore_unknown_args=True,
                 cli_implicit_flags=True,
                 cli_kebab_case=True,
             ),

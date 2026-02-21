@@ -23,3 +23,14 @@ wheels/
 
 # Residual plots
 /plots/
+
+# Web chat logs (personal chat history)
+/logs/
+
+# Models and large files
+/models/
+
+# Frontend (Allow pre-built dist, ignore source node_modules)
+node_modules/
+/web chat/node_modules/
+# /web chat/dist/  <-- Commented out to ALLOW distributive files
