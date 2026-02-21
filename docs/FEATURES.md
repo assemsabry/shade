@@ -1,4 +1,4 @@
-![Shade v2.0.0 Banner](media/shadev2.png)
+![Shade v2.0.0 Banner](../media/shadev2.webp)
 
 # Shade v2.0.0 Features
 ## Fully Automatic Censorship Removal for Large Language Models
